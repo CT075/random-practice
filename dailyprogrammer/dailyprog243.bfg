@@ -1,0 +1,30 @@
+v
+
+0 The blank line above this one matters;
+2 it's the "storage space" where we keep
+1 our user input and accumulator.
+p     v                <  >v
+             >>1+:11g`!|  "
+>&11p1>:11g\%|         1  D
+        vg12:<         -  e
+        >+21p ^        2  f
+                       *  i
+                       2  c
+                       1  i
+                       g  e
+                       -  n
+                       :  t
+                       !  "
+          v"Perfect  " _0`|
+                          "
+                            < Some char
+                          t here so Atom
+                          n doesn't trim
+                          a all of it
+                          d as an empty
+                          n line or sth
+                          u
+                          b
+                          A
+                          "
+          >               >>,,,,,,,,,@
