@@ -1,5 +1,3 @@
--- Cameron Wong
-
 -- Implementation of the problems here:
 --    http://courses.cs.washington.edu/courses/cse341/17wi/homeworks/hw1.pdf
 -- in (mostly) point-free style as practice using arrows and lenses
