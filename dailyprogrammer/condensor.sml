@@ -1,12 +1,17 @@
 
+infixr 4 >>=
+fun (x:'a option) >>= (f:'a -> 'b option) : 'b option =
+  case x of
+       SOME v => f v
+     | NONE => NONE
+
 fun squash (w1:string) (w2:string) : string option =
   let
     fun squash' [] w2 = NONE
       | squash' (w1' as c::cs) w2 =
         if String.isPrefix (String.implode w1') w2
           then SOME w2
-          else SOME ((Char.toString c) ^ (valOf (squash' cs w2)))
-               handle Option => NONE
+          else squash' cs w2 >>= (fn s => SOME ((Char.toString c) ^ s))
   in
     squash' (String.explode w1) w2
   end
