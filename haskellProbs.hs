@@ -488,23 +488,49 @@ fromDAdj = AGraph . (map fst &&& (nub . concat . map makeEdges))
 fromAdj :: [(Int, [Int])] -> AbsGraph
 fromAdj = undirect . fromDAdj
 
+-- This one assumes directed.
 -- 81
-paths :: Int -> Int -> AbsGraph -> [[Int]]
-paths src dst g = paths' src dst $ toArcs g
-  where
-    paths' src dst arcs =
-      if src == dst
-        then [[dst]]
-        else [src:path |
-          arc <- arcs, (fst arc == src),
-          path <- (paths' (snd arc) dst) $ filter (/= arc) arcs
-        ]
+paths :: AbsGraph -> Int -> Int -> [[Int]]
+paths (g@(AGraph (v,e))) src dst =
+  let
+    -- We maintain a frontier of nodes we already have paths to
+    paths' :: [Int] -> Int -> [[Int]]
+    paths' f a
+      | a == src = [[a]]
+      | a `elem` f = []
+      | otherwise =
+          map (++ [a]) $
+          (filter (\x -> (x,a) `elem` e) v >>= paths' (a:f))
+  in
+    paths' [] dst
 
 -- 82
-cycles :: Int -> AbsGraph -> [[Int]]
-cycles n g =
-  nubBy (\x y -> (x `isPrefixOf` y) || (y `isPrefixOf` x)) $
-  map (++[n]) $ concat $ map (flip (paths n) g) neighbors
+cycles :: AbsGraph -> Int -> [[Int]]
+cycles (g@(AGraph (_,e))) v =
+  map (v:) $ [y | (x,y) <- e, x==v] >>= flip (paths g) v
+
+
+-- 83
+-- 84
+-- 85
+-- 86
+
+-- This one assumes undirected
+-- 87
+dfs (g@(AGraph (_,e))) src =
+  let
+    dfs' [] acc = acc
+    dfs' (x:xs) acc =
+      if x `elem` acc then dfs' xs acc else
+        dfs' ([b | (a,b)<-e, a==x] ++ [a | (a,b)<-e, b==x] ++ xs) (acc ++ [x])
+  in
+    dfs' [src] []
+
+-- 88
+conncomp (g@(AGraph (v,_))) = foldl ffn [] v
   where
-    neighbors = snd $ fromJust $ find ((== n) . fst) (toDAdj g)
+    ffn acc i = if any (i `elem`) acc then acc else dfs g i:acc
+
+-- 89
+bipartite (g@(AGraph (v,e))) = all (odd . length) $ (v >>= cycles g)
 
