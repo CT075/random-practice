@@ -507,7 +507,7 @@ paths (g@(AGraph (v,e))) src dst =
 -- 82
 cycles :: AbsGraph -> Int -> [[Int]]
 cycles (g@(AGraph (_,e))) v =
-  map (v:) $ [y | (x,y) <- e, x==v] >>= flip (paths g) v
+  map (v:) $ (map snd $ filter ((==v) . fst) e) >>= flip (paths g) v
 
 
 -- 83
